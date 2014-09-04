@@ -1,0 +1,848 @@
+﻿<!DOCTYPE html>
+
+<html>
+<body><style>
+body {
+    background-color: #000000;
+}</style>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+<center>
+<canvas id="myCanvas" width="800" height="600" style="border:1px solid #ff0000;">
+<center>
+</canvas>
+<script>
+//LucasMiiller turma 1004
+
+                        
+	var canvas = document.getElementById("myCanvas");
+	var context = canvas.getContext("2d");
+	 
+	function changeScene(scene) {
+		switch (scene) {
+			case 'game':
+				game = true;
+				imageplay = false;
+				Voltarcred1 = false;
+				Voltar = false;
+				break;
+			case 'menu':
+				game = false;
+				imageplay = true;
+				Voltarcred1 = false;
+				Voltar = false;
+				break;
+			case 'opcoes':
+				game = false;
+				imageplay = false;
+				Voltarcred1 = false;
+				Voltar = true;
+				break;
+			case 'creditos':
+				game = false;
+				imageplay = false;
+				Voltarcred1 = true;
+				Voltar = false;
+				break;
+		}
+	}
+	 
+	var _mouseUp = function(e)
+	{
+		// usar canvas.offsetLeft e canvas.offsetTop quando canvas no centro.
+		//console.log("mouseUp: true");
+		console.log(e.x + " " + play_x + " " + canvas.offsetLeft);
+		if (imageplay) {
+			if(e.x - canvas.offsetLeft > play_x && e.x - canvas.offsetLeft < play_x + play_w &&
+				e.y - canvas.offsetTop > play_y && e.y - canvas.offsetTop < play_y + play_h)
+			{
+				changeScene('game');
+			}
+			if(e.x - canvas.offsetLeft > Creditos_x  && e.x - canvas.offsetLeft < Creditos_x + Creditos_w &&
+					e.y - canvas.offsetTop > Creditos_y && e.y - canvas.offsetTop < Creditos_y + Creditos_h)
+			{
+				changeScene('creditos');
+			}
+			if(e.x - canvas.offsetLeft > Op_x && e.x - canvas.offsetLeft < Op_x + Op_w &&
+					e.y - canvas.offsetTop > Op_y && e.y - canvas.offsetTop < Op_y + Op_h)
+			{
+				changeScene('opcoes');
+			}
+		} else if (Voltarcred1) 
+		{
+			if(e.x > Voltarcred_x && e.x < Voltarcred_x + Voltarcred_w &&
+				e.y > Voltarcred_y && e.y < Voltarcred_y + Voltarcred_h )
+			{
+				changeScene('menu');    
+			}
+		} else if (Voltar) 
+		{
+			if(e.x > Voltar_x && e.x < Voltar_x + Voltar_w &&
+				e.y > Voltar_y && e.y < Voltar_y + Voltar_h )
+			{
+				changeScene('menu'); 
+			}	
+		}
+		//console.log("game: " + game + " Voltarcred1: " + Voltarcred1 + " Voltar: " + Voltar);
+		
+	}	
+   	
+	var imagePlay = new Image();
+	imagePlay.src = "Images/play.png";
+	var imageplay = true;
+		
+//somMenu
+	var audio_Menu = new Audio();
+	audio_Menu.src = "Images/Menu_som.mp3";
+	audio_Menu.load();
+		
+	var imageReady = false;
+		// posição e tamanho da imagem
+
+
+	var play_w = 300;
+	var play_h = 40;
+	var play_x = 230;
+	var play_y = 490;
+
+	var imageOp = new Image();
+	imageOp.src = "Images/op.png";
+	var Op_w = 200;
+	var Op_h = 32;
+	var Op_x = 20;
+	var Op_y = 500;
+   
+	var Pause = new Image();
+	Pause.src = "Images/pause.png";
+	var Pause_w = 113;
+	var Pause_h = 72;
+	var Pause_x = 700;
+	var Pause_y = 15; 
+	var fase = 1;
+	var imageVoltar = new Image();
+	imageVoltar.src = "Images/Voltar.png";
+	var Voltar_w = 93;
+	var Voltar_h = 78;
+	var Voltar_x = 680;
+	var Voltar_y = 475;
+	var Voltar = false;
+	
+	
+	var imageCreditos = new Image();
+	imageCreditos.src = "Images/Creditos.png";
+	var Creditos_w = 200;
+    var Creditos_h = 32;
+    var Creditos_x = 580;
+    var Creditos_y = 500;
+	
+	var Creditos = new Image();
+	Creditos.src = "Images/CreditosTela.jpg";
+	var CreditosTela_w = 800;
+    var CreditosTela_h = 600;
+    var CreditosTela_x = 0;
+    var CreditosTela_y = 0;
+	 
+	var Voltarcred = new Image();
+	Voltarcred.src = "Images/Voltar1.png";
+	var Voltarcred_w = 93;
+	var Voltarcred_h = 78;
+	var Voltarcred_x = 680;
+	var Voltarcred_y = 475;
+	var Voltarcred1 = false ;
+	
+	
+	var Menu = new Image();
+	Menu.src = "Images/Menu.jpg";
+	var Menu_w = 1600;
+	var Menu_h = 600;
+	var Menu_x = 0;
+	var Menu_y = 0;
+	var Menu_speed = 3;
+	
+	var background = new Image();
+	background.src = "Images/background.jpg";
+	var background1 = new Image();
+	background1.src = "Images/background1.jpg";
+	var background_w = 1600;
+	var background_h = 600;
+	var background_x = 0;
+	var background1_x = 1600;
+	var background_y = 0;
+	var background_speed = 8;
+	
+	var audio_Menu = new Audio();
+	audio_Menu.src = "Images/Menu_som.mp3";
+
+	var Telaop = new Image();
+	Telaop.src = "Images/Som.jpg";
+	var Telaop_w = 800;
+	var Telaop_h = 600;
+	var Telaop_x = 0;
+	var Telaop_y = 0;
+	
+	var inimigo  = new Image();
+	inimigo.src = "Images/inimigo01.png";
+    var inimigo2 = new Image();
+	inimigo2.src = "Images/inimigo01.png";
+	var inimigo4  = new Image();
+	inimigo4.src = "Images/inimigo01.png";
+	var inimigo5  = new Image();
+	inimigo5.src = "Images/inimigo01.png";
+	var inimigo6  = new Image();
+	inimigo6.src = "Images/inimigo01.png";
+	
+	var inimigo07  = new Image();
+	inimigo07.src = "Images/inimigo2.png";
+	var inimigo08 = new Image();
+	inimigo08.src = "Images/inimigo2.png";
+    var inimigo9 = new Image();
+	inimigo9.src = "Images/inimigo2.png";
+	var inimigo10 = new Image();
+	inimigo10.src = "Images/inimigo2.png";
+	var inimigo11  = new Image();
+	inimigo11.src = "Images/inimigo2.png";
+
+	
+	var inimigo_w = 50;
+	var inimigo_h = 36;
+	var inimigo_x = 800 + Math.floor(Math.random() * 50);
+
+	var inimigo2_x = 1000 + Math.floor(Math.random() * 100);
+	var inimigo4_x = 1200 + Math.floor(Math.random() * 100);
+	var inimigo5_x = 1400 + Math.floor(Math.random() * 100);
+	var inimigo6_x = 2000  + Math.floor(Math.random() * 100);
+	
+	var inimigo11_x = 800  + Math.floor(Math.random() * 50);
+	var inimigo07_x = 1000 + Math.floor(Math.random() * 100);
+	var inimigo08_x = 1200 + Math.floor(Math.random() * 100);
+	var inimigo9_x = 1400 + Math.floor(Math.random() * 100);
+	var inimigo10_x = 2000  + Math.floor(Math.random() * 100);
+	
+
+	
+    var inimigo9_speed = 0;
+	var inimigo10_speed = 0;
+	var inimigo11_speed = 0;
+	
+	var inimigo_y = 440;
+	var inimigo_speed = 0;
+	var inimigo2_speed = 0;
+    var inimigo4_speed = 0;
+	var inimigo5_speed = 0;
+	var inimigo6_speed = 0;
+	var inimigo07_w = 50;
+	var inimigo07_h = 36;
+	var inimigo07_y = 440;
+	var inimigo07_speed = 0;
+	
+	var inimigo08_w = 50;
+	var inimigo08_h = 36 ;
+	var inimigo08_y = 440 ;
+	var inimigo08_speed = 0;
+	var plataforma = new Image();
+	plataforma.src = "Images/barrinha.png";
+	var plataforma_w = 150;
+    var plataforma_h = 25;
+	var plataforma_x = 780;
+	var plataforma_y = 390;
+	var plataforma_speed = 8;	
+	
+	var start = (new Date()).getTime();
+	var current;	
+	var currentFrame = 0.;	
+	var images = new Array();
+	var numFrames = 4;
+	
+    var game = false;
+	
+	var onGround_y;
+	
+	var start = (new Date()).getTime();
+	var current;
+	var currentFrame = 0.;	
+	
+	var row = 3;
+	var column = 4;
+	var numFrames = row * column;	
+	var player = new Image()
+	player.src = "Images/boneco.png";
+	
+	var frame = {x:0,y:0};
+	
+	function Frame()
+	{
+		if(paused == false)
+		{
+		frame.x += 1;
+		if(frame.x == 3)
+		{
+			frame.x = 0;
+			frame.y ++
+		}
+		
+		if(frame.y == 4)
+		{
+			frame.y = 0;
+		}
+		}
+	setTimeout(Frame,70)
+	}
+	
+	// tamanho do frame na imagem
+	var _w = 648 / row;
+	var _h = 1128 / column;
+	
+	var player_x = 70;
+	var player_y = 430;
+	var player_w = 50;
+	var player_h = 50;
+	var player_weight = 12;
+	var player_speed = 8;
+	var runner_moveup = false;
+	var cause_pulo = true;
+	var cause_pulo2 = true;
+    var vidas = 1;
+    var pontuação = 0;
+	var pulo = 0;
+	function deltaTime()
+	{
+		current = (new Date()).getTime();
+		elapsed = current - start;
+		start = current;
+		var delta = elapsed / 1000.;			
+		return delta;
+	
+	}
+
+	var  player_moveleft = false;
+	var player_moveright = false;
+	
+	var _keyDown = function(e)
+	{
+		switch (e.keyCode)
+		{
+			case 13:
+				if (imageplay) changeScene('game');
+				break;
+			case 37: 
+				player_moveleft = true;
+				break;
+
+			case 39: 
+				player_moveright = true;
+				break;
+		   
+			
+			case 80://P
+			if(game && vidas > 0)
+			{
+			   paused = !paused;
+			}
+			else 
+			{
+				paused
+			}
+			break;
+			case 32: // seta espaço
+			if(player_y + player_h >= 0 && pulo < 2 )
+				{
+					runner_moveup = true;	
+				    onGround_y = player_y;
+				    pulo++;
+				}
+			break;
+		}
+	}
+
+	var _keyUp = function(e)
+	{
+		switch (e.keyCode)
+		{
+			case 37:
+				player_moveleft = false;
+				break;
+
+			case 39:
+				player_moveright = false;
+				break;	
+
+			
+			    
+
+		}				
+	}
+
+	document.addEventListener("keydown",_keyDown , true);
+	document.addEventListener("keyup", _keyUp,   true);	
+	document.addEventListener("mouseup",   _mouseUp,   false);
+
+	function drawStrokeRect(x,y,w,h,color)
+	{
+		context.strokeStyle = color;
+		context.strokeRect(0,480,800,300);
+	}
+	
+	Menu.onload = function()
+	{
+		imageReady = true;
+	};
+	
+	function updatePlayer()
+	{
+		var delta = deltaTime();	
+		currentFrame += delta * 5;	
+		
+       	if(player_y >= 420)
+		{
+			pulo = 1;
+		}
+			
+		if(runner_moveup )
+		{
+			if(player_y > 0 )
+			{
+				player_y -= player_speed * 1.0 ;
+			}				
+		}  
+		else {	
+			if(player_y + player_h < 470)
+			{
+				player_y += player_speed * 1.3  ;
+			}	
+		}	
+		
+			if(player_y <= onGround_y - 2*player_h)
+		{
+			runner_moveup = false;
+		}	
+		
+		if(player_y + player_h <= 470)
+		{
+			cause_pulo = false;
+		}
+		else
+		{
+			cause_pulo = true;
+		}
+		
+	
+		if(player_y <= 300)
+		{
+			cause_pulo2 = false;
+		}
+		
+		if(player_y + player_h >= 470)
+		{
+			cause_pulo2 = true;
+		}
+
+		if (player_x <= 0)
+		{
+			player_x = 0;			
+		}	
+		else if (player_x + player_w >= canvas.width)
+		{
+			player_x = canvas.width - player_w;			
+		}	
+		if (player_moveleft)
+		{
+			player_x -= player_speed;
+		}
+		
+		if (player_moveright)
+		{
+			player_x += player_speed;
+		} else if (player_x > 70) {
+			player_x -= 8;
+		}
+		
+		
+		//console.log("player_x: " + player_x);
+		
+	   
+	}
+ 
+	function updateMenu()
+  
+    {
+          Menu_x -=Menu_speed;
+       if (Menu_x <= -800)
+       {
+           Menu_x = 0;
+       }
+    }
+	function updateBackground()
+	{
+		background_x -= background_speed;
+		background1_x -= background_speed;
+		
+		if(background_x + background_w  <= 0)
+		{
+			background_x = 1600;
+		}
+		
+		if(background1_x + background_w  <= 0)
+		{
+			background1_x = 1600;
+		}
+
+	}
+	 function updateInimigo()
+	{
+	inimigo_x -= inimigo_speed;
+	inimigo2_x -= inimigo2_speed;
+	inimigo4_x -= inimigo4_speed;
+	inimigo5_x -= inimigo5_speed;
+	inimigo6_x -= inimigo6_speed;
+	inimigo07_x -= inimigo07_speed;	
+	inimigo08_x -= inimigo08_speed;	
+	inimigo9_x -= inimigo9_speed;	
+	inimigo10_x -= inimigo10_speed;	
+	inimigo11_x -= inimigo11_speed;	
+		
+		if(inimigo_x + inimigo_w > player_x && inimigo_x < player_x + player_w &&
+		inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+	    vidas = 0 ;
+	}
+		if(inimigo2_x + inimigo_w > player_x && inimigo2_x < player_x + player_w &&
+		inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+	    vidas = 0 ;
+	}
+		
+	if(inimigo4_x + inimigo_w > player_x && inimigo4_x < player_x + player_w &&
+		inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+	    vidas = 0 ;
+	}
+	if(inimigo5_x + inimigo_w > player_x && inimigo5_x < player_x + player_w &&
+		inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+	    vidas = 0 ;
+	}
+	if(inimigo6_x + inimigo_w > player_x && inimigo6_x < player_x + player_w &&
+		inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+	    vidas = 0 ;
+	}
+	
+	if(inimigo07_x + inimigo07_w > player_x && inimigo07_x < player_x + player_w &&
+		inimigo07_y + inimigo07_h > player_y && inimigo07_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+		vidas -- ;
+	}
+	
+		if(inimigo08_x + inimigo08_w > player_x && inimigo08_x < player_x + player_w &&
+		inimigo08_y + inimigo08_h > player_y && inimigo08_y < player_y + player_h)
+	{
+		paused = true;
+		context.fillText("GAME OVER", 400, 300); 
+		vidas = 0 ;
+	}	
+		
+	if(inimigo5_x && inimigo6_x < 0)
+    {			
+		if (inimigo_x + inimigo_w < 0)
+	{
+	 
+		inimigo_x = 800 + Math.floor(Math.random() * 20 )
+	}
+                              
+
+   if (inimigo2_x + inimigo_w < 0)
+	{
+	 
+		inimigo2_x =  1000 + Math.floor(Math.random() * 150)
+   
+	}
+		
+	if (inimigo4_x + inimigo_w < 0)
+	{
+		inimigo4_x =  1300 + Math.floor(Math.random() * 50 )
+    }		
+	if (inimigo5_x + inimigo_w < 0)
+	{
+	
+		inimigo5_x =  1500 + Math.floor(Math.random() * 20 )
+   
+	}	
+	if (inimigo6_x + inimigo_w < 0)
+	{
+	 
+		inimigo6_x =  1700 + Math.floor(Math.random() * 150)
+   
+	}	
+		
+	
+	}
+		if(inimigo9_x && inimigo10_x < 0)
+    {			
+		if (inimigo11_x + inimigo_w < 0)
+	{
+	 
+		inimigo11_x = 800 + Math.floor(Math.random() * 20 )
+	}
+                              
+
+   if (inimigo07_x + inimigo_w < 0)
+	{
+	 
+		inimigo07_x =  1000 + Math.floor(Math.random() * 150)
+   
+	}
+		
+	if (inimigo08_x + inimigo_w < 0)
+	{
+		inimigo08_x =  1300 + Math.floor(Math.random() * 50 )
+    }		
+	if (inimigo9_x + inimigo_w < 0)
+	{
+	
+		inimigo9_x =  1500 + Math.floor(Math.random() * 20 )
+   
+	}	
+	if (inimigo10_x + inimigo_w < 0)
+	{
+	 
+		inimigo10_x =  1700 + Math.floor(Math.random() * 150)
+   
+	}	
+		
+	
+	}
+	
+	}
+ 
+    function updatepontuação()
+	{
+		
+		if(vidas > 0)
+		{		
+			pontuação ++;	
+		}
+	
+		if(pontuação == 30)
+		{
+			inimigo_speed = 8;
+			inimigo2_speed = 8;
+		}  
+	   
+		if(pontuação == 666)
+		{
+			vidas = 2
+			
+		}  
+	   if(pontuação == 70)
+		{
+			inimigo6_speed =  8 ;
+		}
+		if(pontuação == 120 )
+		{
+			inimigo4_speed = 8 ;
+			inimigo5_speed =  8;
+		}
+		
+		if(pontuação == 500)
+		{
+			inimigo11_speed = 9;
+			inimigo07_speed = 9;
+			fase = 2
+		}
+  
+	   if(pontuação == 540)
+		{
+			inimigo08_speed =  9 ;
+		}
+		if(pontuação == 590 )
+		{
+			inimigo9_speed = 9 ;
+			inimigo10_speed =  9;
+		}
+		if(pontuação >= 500 && inimigo2_x < 0)
+		{
+			inimigo_speed = 0;
+			inimigo2_speed = 0;
+		}
+		if(pontuação >= 550 && inimigo6_x > 600)
+		{
+			inimigo6_speed = 0;
+		}
+		if(pontuação >= 600 && inimigo5_x > 600)
+		{
+			inimigo4_speed = 0;
+			inimigo5_speed = 0;
+		}
+		
+	  
+	
+	  
+		if(pontuação == 170)
+	   {
+			 plataforma_x = 1200;
+	   }
+	
+	}
+	
+  
+   function updatePforme()
+	{ 
+		//console.log("updatePforme");
+	
+		plataforma_x -= plataforma_speed;
+		
+		if (plataforma_x + plataforma_w < 0)
+		{
+		 
+			plataforma_x = 1250
+		}
+		
+		if( player_x + player_w > plataforma_x && player_x < plataforma_x + plataforma_w  )
+		{
+         
+		
+		if(player_y + player_h >= plataforma_y && player_y + player_h <= plataforma_y + 12 )
+        {
+				player_y  = plataforma_y - player_h - 5  ;         
+				
+				pulo =1
+		}		
+      
+		
+		} 
+	
+	}
+	
+	
+	var paused = false;
+	function update()
+	{
+		    
+		   updateMenu();
+		if ( paused == false && game  )
+		{	
+			updatePlayer();
+			updateBackground();
+			updateInimigo();
+			updatePforme();
+		    updatepontuação();
+		}	 
+	  
+	}
+
+	function draw()
+	{
+		//console.log("game: " + game + " Voltarcred1: " + Voltarcred1 + " Voltar: " + Voltar + " imageplay: " + imageplay);
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		if (imageReady == true)	
+		{
+			if (game)				
+			{
+				context.drawImage(background, background_x, background_y, background_w, background_h); 
+				context.drawImage(background1, background1_x, background_y, background_w, background_h);
+				context.drawImage(plataforma,plataforma_x, plataforma_y, plataforma_w, plataforma_h);
+				context.drawImage(player,
+						 frame.x * _w, 
+						 frame.y * _h,
+						  _w,_h,
+						  player_x, player_y, player_w, player_h); 	
+				context.drawImage(Pause, Pause_x, Pause_y, Pause_w, Pause_h); 
+				drawStrokeRect();
+				context.drawImage(inimigo, inimigo_x, inimigo_y, inimigo_w, inimigo_h); 
+				context.drawImage(inimigo2, inimigo2_x, inimigo_y, inimigo_w, inimigo_h); 
+				context.drawImage(inimigo4, inimigo4_x, inimigo_y, inimigo_w, inimigo_h);  
+				context.drawImage(inimigo5, inimigo5_x, inimigo_y, inimigo_w, inimigo_h); 
+				context.drawImage(inimigo6, inimigo6_x, inimigo_y, inimigo_w, inimigo_h); 
+				
+				context.drawImage(inimigo11, inimigo11_x, inimigo_y, inimigo_w, inimigo_h); 
+				context.drawImage(inimigo9, inimigo9_x, inimigo_y, inimigo_w, inimigo_h); 
+				context.drawImage(inimigo10, inimigo10_x, inimigo_y, inimigo_w, inimigo_h);  
+				context.drawImage(inimigo07, inimigo07_x, inimigo07_y, inimigo07_w, inimigo07_h); 
+				context.drawImage(inimigo08, inimigo08_x, inimigo08_y, inimigo08_w, inimigo08_h); 
+				audio_Menu.pause();
+				
+				context.font = "25px Cambria";
+				context.fillText("PONTUAÇÃO:" + pontuação, 25, 150);
+				context.fillText("VIDA:" + vidas, 25, 170);
+				context.font = "35px Cambria";
+				context.fillText("FASE:" + fase,25, 50);
+				if (inimigo_x + inimigo_w > player_x && inimigo_x < player_x + player_w &&
+					inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+				{
+					context.fillText("GAME OVER", 350, 300);
+				}
+				
+				if (inimigo2_x + inimigo_w > player_x && inimigo2_x < player_x + player_w &&
+					inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+				{
+					context.fillText("GAME OVER", 350, 300);
+				} 
+				
+				if(inimigo5_x + inimigo_w > player_x && inimigo5_x < player_x + player_w &&
+					inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+				{
+					context.fillText("GAME OVER", 350, 300);
+				}
+				
+				if(inimigo4_x + inimigo_w > player_x && inimigo4_x < player_x + player_w &&
+					inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+				{
+					context.fillText("GAME OVER", 350, 300);
+				}
+				
+				if(inimigo6_x + inimigo_w > player_x && inimigo6_x < player_x + player_w &&
+					inimigo_y + inimigo_h > player_y && inimigo_y < player_y + player_h)
+				{
+					context.fillText("GAME OVER", 350, 300);
+				}
+				
+			}                   			
+			
+			if  (Voltar)
+			{
+				context.drawImage(Telaop, Telaop_x, Telaop_y, Telaop_w, Telaop_h);
+				context.drawImage(imageVoltar, Voltar_x, Voltar_y, Voltar_w, Voltar_h);	
+			}
+		
+			if  (Voltarcred1)
+			{
+				context.drawImage(Creditos,CreditosTela_x, CreditosTela_y,CreditosTela_w, CreditosTela_h);
+				context.drawImage(Voltarcred,Voltarcred_x, Voltarcred_y, Voltarcred_w, Voltarcred_h);
+			}
+			
+			if  (imageplay)
+			{
+				context.drawImage(Menu, Menu_x, Menu_y, Menu_w, Menu_h); 
+				context.drawImage(imagePlay, play_x, play_y, play_w, play_h);  
+				context.drawImage(imageCreditos, Creditos_x, Creditos_y,Creditos_w, Creditos_h);  
+				context.drawImage(imageOp, Op_x, Op_y, Op_w, Op_h);  		
+				audio_Menu.play();     
+			}	
+		}
+	}
+
+	function loop()
+	{
+		update();
+		draw();
+		setTimeout(loop, 30);
+	}
+	Frame();
+	loop();
+	
+</script>
+
+
+</body>
+</html>
